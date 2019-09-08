@@ -153,14 +153,14 @@
 
                         
                         <li>
-                            <a href="/tags/">Tags</a>
+                            <a href="/archive/">Archives</a>
                         </li>
                         
                     
 
                         
                         <li>
-                            <a href="/archive/">Archives</a>
+                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -220,22 +220,22 @@
 <p>Heartbleed，也简称为心血漏洞，是一个出现在加密程序库OpenSSL的安全漏洞，该程序库广泛用于实现互联网的传输层安全协议。它于2012年被引入了软件中，2014年4月首次向公众披露。</p>
 </blockquote>
 <h1 id="hearbleed-漏洞是什么">hearbleed 漏洞是什么？</h1>
-<p>heartbleed 漏洞是⼀个出现在加密程序库 OpenSSL 的安全漏洞。该程序库广泛⽤用于实现互联⽹的传输层安全协议。</p>
+<p>heartbleed 漏洞是⼀个出现在加密程序库 OpenSSL 的安全漏洞。该程序库广泛用于实现互联⽹的传输层安全协议。</p>
 <h1 id="它的基本背景和影响">它的基本背景和影响?</h1>
 <hr>
-<p>OpenSSL 于2012年被引入软件中，2014年4月首次向公众披露。只要使⽤用的是存在缺陷的<br>
-OpenSSL实例，⽆无论是服务器还是客户端，都可能因此受到攻击。攻击者可以获取加密⽤的私钥， 用户账号密码，让OpenSSL成为了了⽆用的废锁。此次漏洞造成使当时许多知名⽹站受到影响。<br>
-	受影响版本:OpenSSL 1.0.1 - 1.0.1f 存在漏洞。</p>
+<p>OpenSSL 于2012年被引入软件中，2014年4月首次向公众披露。只要使用的是存在缺陷的<br>
+OpenSSL实例，无论是服务器还是客户端，都可能因此受到攻击。攻击者可以获取加密⽤的私钥， 用户账号密码，让OpenSSL成为了⽆用的废锁。此次漏洞造成使当时许多知名⽹站受到影响。</p>
+<p>受影响版本:OpenSSL 1.0.1 - 1.0.1f 存在漏洞。</p>
 <h1 id="漏洞的原理">漏洞的原理?</h1>
 <hr>
 <p>Heartbleed漏洞，这项严重缺陷(CVE-2014-0160)的产生是由于未能在memcpy()调用受害⽤<br>
 户输⼊内容作为长度参数之前正确进行边界检查。攻击者可以追踪OpenSSL所分配的64KB缓存、将 超出必要范围的字节信息复制到缓存当中再返回缓存内容，这样一来受害者的内存内容就会以每次64KB的速度<br>
 进⾏泄露。</p>
 <h2 id="1gt-源码分析">1&gt; 源码分析:</h2>
-<p>存在该漏漏洞洞的源⽂文件有两个ssl/d1_both.c和ssl/t1_lib.c。⼼心跳处理理逻辑分别是 dtls1_process_heartbeat 和 tls1_process_heartbeat 两个函数。</p>
+<p>存在该漏洞的源文件有两个ssl/d1_both.c和ssl/t1_lib.c。⼼心跳处理逻辑分别是 dtls1_process_heartbeat 和 tls1_process_heartbeat 两个函数。</p>
 <p>选取tls1_process_heartbeat函数进⾏分析，贴上源码:</p>
 <p><img src="../heartbleed%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/%E6%BC%8F%E6%B4%9E%E6%BA%90%E7%A0%81.png" alt="漏洞源码"></p>
-<p>前面是在定义type，length，payload，pad 这三部分并从请求包中接受他们，到中间malloc时已经 是有问题了，直接用payload申请内存。payload太大，⼼心跳包按理只返回接受的payload，现在多出 的部分，由内存随机分配，故内存泄漏。然后到memcpy时，构造的返回包就已经含有泄露的数据了。</p>
+<p>前面是在定义type，length，payload，pad 这三部分并从请求包中接受他们，到中间malloc时已经 是有问题了，直接用payload申请内存。payload太大，心跳包按理只返回接受的payload，现在多出 的部分，由内存随机分配，故内存泄漏。然后到memcpy时，构造的返回包就已经含有泄露的数据了。</p>
 <h2 id="2gt-分析poc">2&gt; 分析POC:</h2>
 <p><img src="../heartbleed%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/poc_crutial.png" alt="poc_crutial"></p>
 <p>这⾥的40 00是关键，它代表payload_length,与上方的length 00 03冲突，所以这里代表⼀个异常的⼼跳包。</p>
