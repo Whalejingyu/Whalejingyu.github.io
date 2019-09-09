@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://www.whalejingyu.xyz/article/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF%E4%B8%8E%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/</loc>
+        <lastmod>2019-09-09T14:41:43.019Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://www.whalejingyu.xyz/article/Docker%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/</loc>
         <lastmod>2019-09-09T13:19:36.515Z</lastmod>
         <changefreq>weekly</changefreq>
