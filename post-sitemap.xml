@@ -8,7 +8,23 @@
 
     <url>
         <loc>http://www.whalejingyu.xyz/article/%E4%BB%A5%E5%A4%AA%E5%9D%8A/</loc>
-        <lastmod>2019-09-09T17:41:06.260Z</lastmod>
+        <lastmod>2019-09-09T17:56:48.020Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.whalejingyu.xyz/article/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E4%B8%80/</loc>
+        <lastmod>2019-09-09T17:53:03.057Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.whalejingyu.xyz/article/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
+        <lastmod>2019-09-09T17:51:57.052Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
@@ -23,7 +39,7 @@
     </url>
 
     <url>
-        <loc>http://www.whalejingyu.xyz/article/Android%E5%BC%80%E5%8F%91-%E4%B8%80/</loc>
+        <loc>http://www.whalejingyu.xyz/article/Android%E5%BC%80%E5%8F%91/</loc>
         <lastmod>2019-09-09T17:38:18.202Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -41,14 +57,6 @@
     <url>
         <loc>http://www.whalejingyu.xyz/article/%E8%BD%AF%E4%BB%B6%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C/</loc>
         <lastmod>2019-09-09T17:34:00.503Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.whalejingyu.xyz/article/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E4%B8%80/</loc>
-        <lastmod>2019-09-09T17:33:40.134Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 

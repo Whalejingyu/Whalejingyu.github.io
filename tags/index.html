@@ -138,6 +138,13 @@
 
                         
                         <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
                             <a href="/about/">About</a>
                         </li>
                         
@@ -146,13 +153,6 @@
                         
                         <li>
                             <a href="/archive/">Archives</a>
-                        </li>
-                        
-                    
-
-                        
-                        <li>
-                            <a href="/tags/">Tags</a>
                         </li>
                         
                     
@@ -206,21 +206,21 @@
                 
                     <a href="#Thinking" title="Thinking" rel="1">Thinking</a>
                 
+                    <a href="#渗透测试" title="渗透测试" rel="1">渗透测试</a>
+                
                     <a href="#区块链" title="区块链" rel="2">区块链</a>
                 
                     <a href="#暗网" title="暗网" rel="1">暗网</a>
                 
-                    <a href="#渗透测试" title="渗透测试" rel="1">渗透测试</a>
-                
-                    <a href="#NLP" title="NLP" rel="1">NLP</a>
-                
-                    <a href="#计算机网络" title="计算机网络" rel="1">计算机网络</a>
-                
-                    <a href="#SDN" title="SDN" rel="1">SDN</a>
+                    <a href="#验证码" title="验证码" rel="1">验证码</a>
                 
                     <a href="#web全栈" title="web全栈" rel="1">web全栈</a>
                 
-                    <a href="#验证码" title="验证码" rel="1">验证码</a>
+                    <a href="#NLP" title="NLP" rel="1">NLP</a>
+                
+                    <a href="#计算机网络" title="计算机网络" rel="2">计算机网络</a>
+                
+                    <a href="#SDN" title="SDN" rel="1">SDN</a>
                 
                     <a href="#Docker" title="Docker" rel="2">Docker</a>
                 
@@ -241,7 +241,7 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/Android开发-一/">
+                     <a href="/article/Android开发/">
                         <h2 class="post-title">
                             Android开发(一) 
                         </h2>
@@ -284,6 +284,32 @@
             </div>
             
             <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="渗透测试">
+                    <span class="tag-text">渗透测试</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/zap抓微信部分小程序https流量异常的解决方案/">
+                        <h2 class="post-title">
+                            [Sec] zap抓微信部分小程序https流量异常的解决方案 
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                这是一个实验，也是对处理问题方式的思考
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="区块链">
                     <span class="tag-text">区块链</span>
                 </span>
@@ -295,7 +321,7 @@
                  <div class="post-preview">
                      <a href="/article/以太坊/">
                         <h2 class="post-title">
-                             比特币 
+                             以太坊 
                         </h2>
                         
                             <h3 class="post-subtitle">
@@ -355,8 +381,8 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="渗透测试">
-                    <span class="tag-text">渗透测试</span>
+                <span class="fa fa-tag listing-seperator" id="验证码">
+                    <span class="tag-text">验证码</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -364,13 +390,39 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/zap抓微信部分小程序https流量异常的解决方案/">
+                     <a href="/article/有趣的验证码/">
                         <h2 class="post-title">
-                            [Sec] zap抓微信部分小程序https流量异常的解决方案 
+                            [Sec] 有趣的验证码 
                         </h2>
                         
                             <h3 class="post-subtitle">
-                                这是一个实验，也是对处理问题方式的思考
+                                这可能是安全中比较有趣的部分了
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="web全栈">
+                    <span class="tag-text">web全栈</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/浏览器基础架构/">
+                        <h2 class="post-title">
+                            [Sec] 浏览器基础架构 
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                安全需要广泛的知识！
                             </h3>
                         
                     </a>
@@ -418,7 +470,26 @@
                  <div class="post-preview">
                      <a href="/article/计算机网络-一/">
                         <h2 class="post-title">
-                            [Sec] 计算机网络(一) 
+                            计算机网络(一) 
+                        </h2>
+                        
+                            <h3 class="post-subtitle">
+                                大三特别重要的科目啦！
+                            </h3>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/article/计算机网络/">
+                        <h2 class="post-title">
+                            计算机网络(一) 
                         </h2>
                         
                             <h3 class="post-subtitle">
@@ -459,58 +530,6 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="web全栈">
-                    <span class="tag-text">web全栈</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/article/浏览器基础架构/">
-                        <h2 class="post-title">
-                            [Sec] 浏览器基础架构 
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                安全需要广泛的知识！
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="验证码">
-                    <span class="tag-text">验证码</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/article/有趣的验证码/">
-                        <h2 class="post-title">
-                            [Sec] 有趣的验证码 
-                        </h2>
-                        
-                            <h3 class="post-subtitle">
-                                这可能是安全中比较有趣的部分了
-                            </h3>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="Docker">
                     <span class="tag-text">Docker</span>
                 </span>
@@ -520,9 +539,9 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/Docker基本命令/">
+                     <a href="/article/docker核心技术与实现原理/">
                         <h2 class="post-title">
-                            [Sec] Docker的基本操作 
+                            [Sec] Docker的核心技术与实现原理 
                         </h2>
                         
                             <h3 class="post-subtitle">
@@ -539,9 +558,9 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/article/docker核心技术与实现原理/">
+                     <a href="/article/Docker基本命令/">
                         <h2 class="post-title">
-                            [Sec] Docker的核心技术与实现原理 
+                            [Sec] Docker的基本操作 
                         </h2>
                         
                             <h3 class="post-subtitle">
