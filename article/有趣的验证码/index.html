@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Sec] 信息安全的思想  - Whalejingyu | Blog
+          [Sec] 有趣的验证码  - Whalejingyu | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.whalejingyu.xyz/article/Thingking of Sec/">
+    <link rel="canonical" href="http://www.whalejingyu.xyz/article/有趣的验证码/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -71,7 +71,7 @@
 <style type="text/css">
     header.intro-header{
         
-            background-image: url('/img/article_header/top1.jpg')
+            background-image: url('../有趣的验证码/2.jpg')
             /*post*/
         
     }
@@ -92,14 +92,14 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#Thinking" title="Thinking">Thinking</a>
+                              <a class="tag" href="/tags/#验证码" title="验证码">验证码</a>
                             
                         </div>
-                        <h1>[Sec] 信息安全的思想 </h1>
-                        <h2 class="subheading">This is important.</h2>
+                        <h1>[Sec] 有趣的验证码 </h1>
+                        <h2 class="subheading">这可能是安全中比较有趣的部分了</h2>
                         <span class="meta">
                             Posted by Whalejingyu on
-                            2019-09-07
+                            2019-09-09
                         </span>
                     </div>
                 
@@ -216,13 +216,44 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="have-fun-_">Have fun ^_^</h1>
-<hr>
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- Place this tag where you want the button to render. -->
-<p>Please <a class="github-button" href="https://github.com/Whalejingyu/Whalejingyu.github.io" data-icon="octicon-star" aria-label="Star Whalejingyu/Whalejingyu.github.io on GitHub" target="_blank" rel="noopener">Star</a> this Project if you like it! <a class="github-button" href="https://github.com/Whalejingyu" aria-label="Follow @Whalejingyu on GitHub" target="_blank" rel="noopener">Follow</a> would also be appreciated!<br>
-Peace!</p>
+                <blockquote>
+<p>原文链接: <a href="https://mp.weixin.qq.com/s/5hUS9Mbc1NHi5MEZpGcGEA" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/5hUS9Mbc1NHi5MEZpGcGEA</a></p>
+</blockquote>
+<h1 id="如何设计相对安全的图形验证码">如何设计相对安全的图形验证码？</h1>
+<h3 id="传统表单式验证码">传统表单式验证码:</h3>
+<p>验证码（CAPTCHA）即“Completely Automated Public Turing test to tell Computers and Humans Apart”（全自动区分计算机和人类的图灵测试）的缩写，是一种区分用户是计算机还是人的公共全自动程序。</p>
+<p>简单概括如下：</p>
+<p>验证码在网络投票、交友论坛、网上商城等业务中，经常用来防止恶意用户侵入、恶意灌水、刷票，爆破、撞库、接口滥用等问题，为防止客户端用程序进行自动识别，因此图片中通常要加上一些干扰象素，由用户肉眼识别其中的验证码信息。客户输入表单提交时，验证码也提交给网站服务器，只有验证成功，才能执行相应的操作，其在Web安全中有着重要的应用。<br>
+　　<br>
+好了，废话不多说，为了回答我们最初的问题，我们必须要知道图形验证码在设计和使用中有哪些坑，哪些地方容易出问题。</p>
+<p>列举一些在安全测试中发现的设计和使用上的安全问题(日后仍要补充)</p>
+<p>0x01:图形验证码数值在返回包中返回前端(可通过自动化程序输入验证码，导致验证码无效，导致防护失效)<br>
+0x02:图形验证码的值由前端生成，发送到后端形成图片<br>
+0x03:图形验证码验证后不失效（成功或失败都应该失效）,可以无限复用<br>
+0x04:单独验证图形验证码，正确返回1，错误返回0，而认证请求却不包含图形验证码（可以绕过前端验证）<br>
+0x05:万能图形验证码（测试环境为方便设置的万能验证码，上线后未关闭）<br>
+0x06:验证码参数值为空时不检测图形验证码<br>
+0x07:无验证码参数时(参数名和参数值都不存在)不检测图形验证码(一般是之前设计的时候没加图形验证码，后期添加图形验证码时保留了老接口)<br>
+0x08:验证码大小值由前端控制,后端无大小检测(生成超大图形验证码，造成内存耗尽，拒绝服务)<br>
+0x09:图形验证码过于简单(无扭曲，无干扰线导致，可自动化图像识别)<br>
+0x0A:认证过程中，先验证账号密码，后验证图形验证码(逻辑顺序有误，验证码起不到防护作用)<br>
+0x0B:验证码图片中数值不够随机，可预测导致可以猜解。</p>
+<h4 id="如何设计出一个相对安全的图形验证码呢">如何设计出一个相对安全的图形验证码呢？</h4>
+<h5 id="设计上">设计上：</h5>
+<p>1）验证码字符集合和长度应可配置，至少四位，不允许单独使用英文字符或数字。<br>
+2）验证码要能够置设置背景色、字符颜色、字符旋转、扭曲、字符粘连等，要添加干扰线，干扰线的颜色、尺寸和数量要可通过配置进行设定。<br>
+3）验证码生成过程中不仅要使用安全随机函数还要确保种子绝对随机的，保证每次生成验证码的唯一性和不可预测性，防止重放攻击。<br>
+4）针对一次请求生成的验证码只能用一次，用完立即过期。每次生成的验证码不允许跨会话和请求使用。<br>
+5）验证码内容不允许以任何形式输出到客户端包括验证码的MD5值、 Base64转码值等。</p>
+<h5 id="另外图形验证码使用上应注意">另外图形验证码使用上应注意：</h5>
+<ol start="6">
+<li>验证码参数和认证参数需要一起提交，到后端验证时要先验证验证码，正确后再进行后续认证。<br>
+7）后台系统中验证码的验证逻辑要先于口令的验证，只有通过验证码的验证后才能进行用户名、口令等其他身份信息的验证过程。<br>
+8）线上系统不应存在万能验证码，或不验证验证码内容的情况</li>
+</ol>
+<h4 id="各大互联网公司的验证码见闻">各大互联网公司的验证码见闻:</h4>
+<h3 id="语音验证码">语音验证码:</h3>
+<h3 id="ai背景下的验证码">AI背景下的验证码:</h3>
 
                 
 
@@ -230,10 +261,10 @@ Peace!</p>
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/heartbleed漏洞复现/" data-toggle="tooltip" data-placement="top" title="[Sec] heartbleed漏洞复现 ">&larr; Previous Post</a>
-                        </li>
                     
+                        <li class="next">
+                            <a href="/article/docker核心技术与实现原理/" data-toggle="tooltip" data-placement="top" title="[Sec] Docker的核心技术与实现原理 ">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -282,7 +313,7 @@ Peace!</p>
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#have-fun-_"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Have fun ^_^</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#如何设计相对安全的图形验证码"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x5982;&#x4F55;&#x8BBE;&#x8BA1;&#x76F8;&#x5BF9;&#x5B89;&#x5168;&#x7684;&#x56FE;&#x5F62;&#x9A8C;&#x8BC1;&#x7801;&#xFF1F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#传统表单式验证码"><span class="toc-nav-number">1.0.1.</span> <span class="toc-nav-text">&#x4F20;&#x7EDF;&#x8868;&#x5355;&#x5F0F;&#x9A8C;&#x8BC1;&#x7801;:</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#如何设计出一个相对安全的图形验证码呢"><span class="toc-nav-number">1.0.1.1.</span> <span class="toc-nav-text">&#x5982;&#x4F55;&#x8BBE;&#x8BA1;&#x51FA;&#x4E00;&#x4E2A;&#x76F8;&#x5BF9;&#x5B89;&#x5168;&#x7684;&#x56FE;&#x5F62;&#x9A8C;&#x8BC1;&#x7801;&#x5462;&#xFF1F;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#设计上"><span class="toc-nav-number">1.0.1.1.1.</span> <span class="toc-nav-text">&#x8BBE;&#x8BA1;&#x4E0A;&#xFF1A;</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#另外图形验证码使用上应注意"><span class="toc-nav-number">1.0.1.1.2.</span> <span class="toc-nav-text">&#x53E6;&#x5916;&#x56FE;&#x5F62;&#x9A8C;&#x8BC1;&#x7801;&#x4F7F;&#x7528;&#x4E0A;&#x5E94;&#x6CE8;&#x610F;&#xFF1A;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#各大互联网公司的验证码见闻"><span class="toc-nav-number">1.0.1.2.</span> <span class="toc-nav-text">&#x5404;&#x5927;&#x4E92;&#x8054;&#x7F51;&#x516C;&#x53F8;&#x7684;&#x9A8C;&#x8BC1;&#x7801;&#x89C1;&#x95FB;:</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#语音验证码"><span class="toc-nav-number">1.0.2.</span> <span class="toc-nav-text">&#x8BED;&#x97F3;&#x9A8C;&#x8BC1;&#x7801;:</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#ai背景下的验证码"><span class="toc-nav-number">1.0.3.</span> <span class="toc-nav-text">AI&#x80CC;&#x666F;&#x4E0B;&#x7684;&#x9A8C;&#x8BC1;&#x7801;:</span></a></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
@@ -302,7 +333,7 @@ Peace!</p>
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#Thinking" title="Thinking">Thinking</a>
+                          <a class="tag" href="/tags/#验证码" title="验证码">验证码</a>
                         
                     </div>
                 </section>
