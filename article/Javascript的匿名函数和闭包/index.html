@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          [Sec] 自然语言处理  - Whalejingyu | Blog
+          Javascript的匿名函数和闭包  - Whalejingyu | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.whalejingyu.xyz/article/自然语言处理/">
+    <link rel="canonical" href="http://www.whalejingyu.xyz/article/Javascript的匿名函数和闭包/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -71,7 +71,7 @@
 <style type="text/css">
     header.intro-header{
         
-            background-image: url('../自然语言处理/1.png')
+            background-image: url('../Javascript的匿名函数和闭包/1.jpg')
             /*post*/
         
     }
@@ -92,11 +92,11 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#NLP" title="NLP">NLP</a>
+                              <a class="tag" href="/tags/#web全栈" title="web全栈">web全栈</a>
                             
                         </div>
-                        <h1>[Sec] 自然语言处理 </h1>
-                        <h2 class="subheading">AI这么火自然要接触了！</h2>
+                        <h1>Javascript的匿名函数和闭包 </h1>
+                        <h2 class="subheading">我是先在项目中见到它，一直没太管，就套模版，今天就来研究研究它！</h2>
                         <span class="meta">
                             Posted by Whalejingyu on
                             2019-09-10
@@ -216,7 +216,39 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <h1 id="一-匿名函数">一· 匿名函数</h1>
+<p>何为匿名函数？<br>
+故名思义就是没有名字的函数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">getName</span></span>()&#123;</span><br><span class="line">	var name = <span class="string">"Whalejingyu"</span>;</span><br><span class="line">	<span class="built_in">return</span> name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是普通的函数；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">	var name = <span class="string">"Whalejingyu"</span>;</span><br><span class="line">	<span class="built_in">return</span> name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是匿名函数，看到了吧它没有名字！</p>
+<p>但是不能像上面那样直接写，它没名字，不能就这样独立存在。</p>
+<p>应该这样：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">	var name = <span class="string">"Whalejingyu"</span>;  //这里负责封装执行语句</span><br><span class="line">	alert(name);</span><br><span class="line">&#125;)();                          //这里负责传参和执行</span><br></pre></td></tr></table></figure>
+<p>或者如同表达式一样执行下来：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var getName = <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">	var name = <span class="string">"Whalejingyu"</span>;</span><br><span class="line">	<span class="built_in">return</span> name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">alert(getName());             //调用该函数</span><br></pre></td></tr></table></figure>
+<p>普通函数中的匿名函数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">getName</span></span>()&#123;</span><br><span class="line">	var name = <span class="string">"Whalejingyu"</span>;</span><br><span class="line">	<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">		<span class="built_in">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">alert(getName()());           //我是第一次见到的，md</span><br></pre></td></tr></table></figure>
+<h4 id="它的优点">它的优点？</h4>
+<p>它是运行时创建的，它貌似看着很便捷，而且在读取函数成员变量的时候是有帮助的。emmmm,其他的等我在实际开发中再总结····</p>
+<h1 id="二-闭包">二· 闭包</h1>
+<p>何为闭包？<br>
+好吧，不是离散数学中的那个闭包！<br>
+闭包：指有权访问另一个函数作用域中变量的函数；<br>
+创建闭包的常见形式：在一个函数中创建另一个函数，再利用另外一个函数访问被创建的函数哈！↖(^ω^)↗</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">getName</span></span>()&#123;</span><br><span class="line">	var name = <span class="string">"Whalejingyu"</span>;</span><br><span class="line">	<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">		<span class="built_in">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">alert(getName()());</span><br><span class="line"></span><br><span class="line"><span class="comment"># or</span></span><br><span class="line"></span><br><span class="line">var getNameX = getName();</span><br><span class="line">alert(getNameX());</span><br></pre></td></tr></table></figure>
+<p>使用闭包有一个优点，也是它的缺点：就是可以把局部变量驻留在内存中，可以避免使用全局变量。<br>
+(全局变量污染导致应用程序不可预测性，每个模块都可调用必将引来灾难， 所以推荐使用私有的，封装的局部变量)。</p>
+<p>全局变量污染：emmm,可以简单理解为多个js模块文件中的全局变量冲突，产生意想不到的效果！<br>
+解决方案可以看这篇文章：<a href="https://zhuanlan.zhihu.com/p/25489604" target="_blank" rel="noopener">JS全局变量污染和模块化</a></p>
+<h4 id="闭包的经典案例">闭包的经典案例：</h4>
+<p>通过全局变量来累加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">var num=0;             //全局变量 </span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">a</span></span>()&#123;</span><br><span class="line">  num++;               //模块级可以调用全局变量，进行累加</span><br><span class="line">&#125;</span><br><span class="line">  a();   //1</span><br><span class="line">  a();   //2           //执行函数，累加了 </span><br><span class="line">  alert(num);          //输出全局变量</span><br><span class="line"></span><br><span class="line">&lt;---------------------------------------------------------------&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">a</span></span>()&#123;</span><br><span class="line">      var num=0;</span><br><span class="line">      num++;</span><br><span class="line">      <span class="built_in">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">alert(a()); //1</span><br><span class="line">alert(a()); //1        //无法实现累加，因为局部变量又被初始化了</span><br></pre></td></tr></table></figure>
+<p>使用闭包进行累加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">a</span></span>()&#123;</span><br><span class="line">     var num=0;</span><br><span class="line">     <span class="built_in">return</span> <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">     	num++;</span><br><span class="line">     	<span class="built_in">return</span> num;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">   var b=a();          //获得函数 </span><br><span class="line"></span><br><span class="line">   alert(b());  //1    //调用匿名函数 </span><br><span class="line">   alert(b());  //2    //第二次调用匿名函数，实现累加</span><br></pre></td></tr></table></figure>
+<p>PS：由于闭包里作用域返回的局部变量资源不会被立刻销毁回收，所以可能会占用更 多的内存。过度使用闭包会导致性能下降，建议在非常有必要的时候才使用闭包。</p>
+
                 
 
                 <hr>
@@ -224,12 +256,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/Javascript的匿名函数和闭包/" data-toggle="tooltip" data-placement="top" title="Javascript的匿名函数和闭包 ">&larr; Previous Post</a>
+                            <a href="/article/理解面向对象编程中的多态/" data-toggle="tooltip" data-placement="top" title="理解面向对象编程中的多态 ">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/暗网概述/" data-toggle="tooltip" data-placement="top" title="[Sec] 暗网概述 ">Next Post &rarr;</a>
+                            <a href="/article/自然语言处理/" data-toggle="tooltip" data-placement="top" title="[Sec] 自然语言处理 ">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -279,7 +311,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#一-匿名函数"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x4E00;&#xB7; &#x533F;&#x540D;&#x51FD;&#x6570;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#它的优点"><span class="toc-nav-number">1.0.0.1.</span> <span class="toc-nav-text">&#x5B83;&#x7684;&#x4F18;&#x70B9;&#xFF1F;</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#二-闭包"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x4E8C;&#xB7; &#x95ED;&#x5305;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#闭包的经典案例"><span class="toc-nav-number">2.0.0.1.</span> <span class="toc-nav-text">&#x95ED;&#x5305;&#x7684;&#x7ECF;&#x5178;&#x6848;&#x4F8B;&#xFF1A;</span></a></li></ol></li></ol></li></ol></li></ol>
         
         </div>
       </aside>
@@ -299,7 +331,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#NLP" title="NLP">NLP</a>
+                          <a class="tag" href="/tags/#web全栈" title="web全栈">web全栈</a>
                         
                     </div>
                 </section>
