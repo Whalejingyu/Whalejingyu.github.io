@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          Mac上如何查看端口运行程序  - Whalejingyu | Blog
+          CTFHUB-WEB(1) - Whalejingyu | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.whalejingyu.xyz/article/Mac上如何查看端口运行程序/">
+    <link rel="canonical" href="http://www.whalejingyu.xyz/article/CTFHUB-WEB-1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -71,7 +71,7 @@
 <style type="text/css">
     header.intro-header{
         
-            background-image: url('/img/article_header/top1.jpg')
+            background-image: url('../CTFHUB-WEB-1/firstPageOfCtfhub.png')
             /*post*/
         
     }
@@ -95,11 +95,11 @@
                               <a class="tag" href="/tags/#渗透测试" title="渗透测试">渗透测试</a>
                             
                         </div>
-                        <h1>Mac上如何查看端口运行程序 </h1>
-                        <h2 class="subheading">突然发现Mac上的Linux不一样 </h2>
+                        <h1>CTFHUB-WEB(1)</h1>
+                        <h2 class="subheading">静下心来, 从头积累CTF</h2>
                         <span class="meta">
                             Posted by Whalejingyu on
-                            2019-09-18
+                            2020-03-09
                         </span>
                     </div>
                 
@@ -216,11 +216,39 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <h1 id="mac上的">Mac上的</h1>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lsof -i:port</span><br><span class="line">netstat -an | grep port</span><br></pre></td></tr></table></figure>
-<p>#Linux上的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ntlp | grep port</span><br></pre></td></tr></table></figure>
-<h1 id="两个命令的详解">两个命令的详解：</h1>
+                <blockquote>
+<p>本题就是简单的爆破,但是它帮助我更会使用Owasp Zap这个开源渗透工具。</p>
+</blockquote>
+<h1 id="题目考点">题目考点</h1>
+<p>· HTTP 基础认证<br>
+· 脚本编写<br>
+· 爆破</p>
+<h1 id="解题思路">解题思路</h1>
+<hr>
+<p>一个登录界面就这么赤裸裸的展现在你面前,而且这么靠前,他不可能有防爆破的技术的! 所以爆破嘛。当然, 在实际渗透测试中一定要最后爆破, 不能心急, 这是血的教训啊!</p>
+<h1 id="解题过程">解题过程</h1>
+<hr>
+<h2 id="1gt-方法一">1&gt; 方法一</h2>
+<p>访问 /flag 发现需要登录<br>
+所以果断挂上zap代理, 准备看看怎么发的包, 伺机爆破!!! 账户名藏在题干里了, 一看就是admin, 密码随便写一个</p>
+<p>emmmmm, 这内容一看就是base64嘛!!!</p>
+<p><img src="../CTFHUB-WEB-1/base64.png" alt="base64解密"></p>
+<p>果断Fuzz</p>
+<p>payloads选附件里的字典</p>
+<p><img src="../CTFHUB-WEB-1/payloads.png" alt="payloads"></p>
+<p>然后怎么营造合适的payloads呢?</p>
+<p>ok, 就是Processors选项, 选好前缀prefix, 以及base64 encode;</p>
+<p><img src="../CTFHUB-WEB-1/prefix.png" alt="prefix"></p>
+<p>Now, start fuzzing!<br>
+寻找谁是200的状态码, 就是爆破结果，得到的响应内容就是flag</p>
+<h2 id="2gt-方法二">2&gt; 方法二</h2>
+<p>Copy 一个叫wuj1n9的人</p>
+<p>先来一下Http基本认证的原理</p>
+<p><img src="../CTFHUB-WEB-1/basic.png" alt="basic"></p>
+<p>接下来不同的就是用了爆破脚本, payloads是用脚本生成<br>
+脚本如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line">import base64</span><br><span class="line"></span><br><span class="line"><span class="comment"># 字典文件路径</span></span><br><span class="line">dic_file_path = <span class="string">'/Users/wujing/Downloads/10_million_password_list_top_100.txt'</span></span><br><span class="line">with open(dic_file_path, <span class="string">'r'</span>) as f:</span><br><span class="line">    password_dic = f.readlines()</span><br><span class="line"></span><br><span class="line">username = <span class="string">"admin"</span> <span class="comment"># 用户名</span></span><br><span class="line"><span class="keyword">for</span> password <span class="keyword">in</span> password_dic:</span><br><span class="line">    auth = str(username + <span class="string">":"</span> + password).encode(<span class="string">"utf-8"</span>)</span><br><span class="line">    encodestr = base64.b64encode(auth).decode()</span><br><span class="line">    <span class="built_in">print</span>(encodestr)</span><br></pre></td></tr></table></figure>
+<p>然后爆破就得出结果</p>
 
                 
 
@@ -228,13 +256,9 @@
                 <!-- Pager -->
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/article/CTFHUB-WEB-1/" data-toggle="tooltip" data-placement="top" title="CTFHUB-WEB(1)">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/article/理解面向对象编程中的多态/" data-toggle="tooltip" data-placement="top" title="理解面向对象编程中的多态 ">Next Post &rarr;</a>
+                            <a href="/article/Mac上如何查看端口运行程序/" data-toggle="tooltip" data-placement="top" title="Mac上如何查看端口运行程序 ">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -284,7 +308,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#mac上的"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Mac&#x4E0A;&#x7684;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#两个命令的详解"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x4E24;&#x4E2A;&#x547D;&#x4EE4;&#x7684;&#x8BE6;&#x89E3;&#xFF1A;</span></a></li></ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#题目考点"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x9898;&#x76EE;&#x8003;&#x70B9;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#解题思路"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x89E3;&#x9898;&#x601D;&#x8DEF;</span></a></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#解题过程"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x89E3;&#x9898;&#x8FC7;&#x7A0B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#1gt-方法一"><span class="toc-nav-number">3.1.</span> <span class="toc-nav-text">1&gt; &#x65B9;&#x6CD5;&#x4E00;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#2gt-方法二"><span class="toc-nav-number">3.2.</span> <span class="toc-nav-text">2&gt; &#x65B9;&#x6CD5;&#x4E8C;</span></a></li></ol></li></ol>
         
         </div>
       </aside>
