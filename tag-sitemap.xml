@@ -72,22 +72,36 @@
     </url>
 
     <url>
-        <loc>http://www.whalejingyu.xyz/tags/web%E5%85%A8%E6%A0%88/</loc>
-        <lastmod>2019-09-10T15:34:24.297Z</lastmod>
+        <loc>http://www.whalejingyu.xyz/tags/%E9%9B%B6%E4%BF%A1%E4%BB%BB%E7%BD%91%E7%BB%9C/</loc>
+        <lastmod>2020-03-09T13:19:02.249Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://www.whalejingyu.xyz/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</loc>
-        <lastmod>2020-03-09T12:36:56.796Z</lastmod>
+        <lastmod>2020-03-09T14:44:35.708Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://www.whalejingyu.xyz/tags/%E9%9B%B6%E4%BF%A1%E4%BB%BB%E7%BD%91%E7%BB%9C/</loc>
-        <lastmod>2020-03-09T13:19:02.249Z</lastmod>
+        <loc>http://www.whalejingyu.xyz/tags/web%E5%85%A8%E6%A0%88/</loc>
+        <lastmod>2020-03-09T14:57:02.823Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.whalejingyu.xyz/tags/%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95/</loc>
+        <lastmod>2020-03-09T15:02:09.247Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.whalejingyu.xyz/tags/SDP/</loc>
+        <lastmod>2020-03-09T15:05:18.246Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

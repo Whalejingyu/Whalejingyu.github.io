@@ -14,11 +14,11 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <title>
         
-          零信任网络初探 - Whalejingyu | Blog
+          某公司的公网mysql弱密码问题思考 - Whalejingyu | Blog
         
     </title>
 
-    <link rel="canonical" href="http://www.whalejingyu.xyz/article/零信任网络初探/">
+    <link rel="canonical" href="http://www.whalejingyu.xyz/article/某公司的公网mysql弱密码问题思考/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -71,7 +71,7 @@
 <style type="text/css">
     header.intro-header{
         
-            background-image: url('../零信任网络初探/zero trust.jpg')
+            background-image: url('/img/article_header/top1.jpg')
             /*post*/
         
     }
@@ -92,11 +92,11 @@
                     <div class="post-heading">
                         <div class="tags">
                             
-                              <a class="tag" href="/tags/#零信任网络" title="零信任网络">零信任网络</a>
+                              <a class="tag" href="/tags/#渗透测试" title="渗透测试">渗透测试</a>
                             
                         </div>
-                        <h1>零信任网络初探</h1>
-                        <h2 class="subheading">安全体系新思考</h2>
+                        <h1>某公司的公网mysql弱密码问题思考</h1>
+                        <h2 class="subheading">公网mysql实在不应该</h2>
                         <span class="meta">
                             Posted by Whalejingyu on
                             2020-03-09
@@ -216,7 +216,66 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                
+                <hr>
+<blockquote>
+<p>一次日常业务中，发现客户那边，一个mysql暴露在公网中，果断渗透</p>
+</blockquote>
+<h1 id="渗透过程">渗透过程</h1>
+<p>对方是一台mysql服务器被我用nmap扫出来了，好嘛，版本信息什么都有。<br>
+试着爆破一下它的root口令，梦想要用，万一实现了呢。<br>
+emmm，用hydra挂上常用弱密码字典10万条，竟然很快爆出来了，是P@ssw0rd，老夫定睛一看，你这密码怎么长得这么像flag，你玩过？<br>
+root账号口令就这么搞到了，数据库里什么信息都可以看了，要不是没怎么看明白这里面的数据是干啥的，没准儿危害更大。</p>
+<p>sqlmap上马，os-shell追备，好嘛失败，发现好像是secure_file_priv的文件限制，udf提权库文件写不进去相应目录里</p>
+<p>果断和学长搭了一个mysql测试攻击<br>
+sqlmap不行，咱们在想其他招数</p>
+<p>我贼心不死，猜想是不是secure_file_priv文件捣得鬼：</p>
+<h2 id="get-慢查询日志写shell的方法mysql之突破secure_file_priv写shell">Get 慢查询日志写shell的方法(mysql之突破secure_file_priv写shell)：</h2>
+<h3 id="日志的利用">日志的利用</h3>
+<p>在php文件包含漏洞中我们有过这种利用方法：攻击时进行一次附带代码的url请求，然后在日志记录这次请求之后，通过文件包含漏洞来包含这个日志文件，从而执行请求中的代码。</p>
+<p>mysql也具有日志，我们也可以通过日志来getshell。</p>
+<p>mysql日志主要包含:错误日志、查询日志、慢查询日志、事务日志，日志的详细情况参考<a href="https://blog.51cto.com/pangge/1319304" target="_blank" rel="noopener">mysql日志详细解析</a></p>
+<h4 id="我们主要利用慢查询日志来写shell步骤大致分为三步">我们主要利用慢查询日志来写shell,步骤大致分为三步:</h4>
+<h5 id="1设置slow_query_log1即启用慢查询日志默认禁用">1.设置slow_query_log=1.即启用慢查询日志(默认禁用)。</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> global slow_query_log=1;</span><br></pre></td></tr></table></figure>
+<p>成功启用了慢查询日志</p>
+<h5 id="2伪造修改slow_query_log_file日志文件的绝对路径以及文件名">2.伪造(修改)slow_query_log_file日志文件的绝对路径以及文件名</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> global slow_query_log_file=<span class="string">'/var/www/shell.php'</span>;</span><br></pre></td></tr></table></figure>
+<p>这一步就失败了，看了一下可能是权限问题</p>
+<h5 id="3向日志文件写入shell">3.向日志文件写入shell</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select <span class="string">'&lt;?php phpinfo();?&gt;'</span> or sleep(11);</span><br></pre></td></tr></table></figure>
+<p>尽管不可行也要写下来，积累了。<br>
+后来发现从一开始就不该采用这个方法，后面马上就说。</p>
+<p>其实以上是跟写马等类似的方法，就目前看上面至少是得有网站在前面才行吧，好嘛同服务器上只有一个静态网页，看看跟他连着的服务器中有一个可以访问的web站点，但是一看就不是公司的业务范畴<br>
+所以别惹事，不管它。</p>
+<h2 id="尝试手动mysql-udf提权">尝试手动mysql udf提权</h2>
+<p><a href="https://blog.csdn.net/qq_33020901/article/details/78827375" target="_blank" rel="noopener">mysql udf 提权</a><br>
+研究其过程，发现与sqlmap别无二致，那么就别浪费时间了，关键目录我们都没有写权限。</p>
+<h2 id="联合一些mysql的其他漏洞来帮助我们获取服务器权限">联合一些mysql的其他漏洞来帮助我们获取服务器权限</h2>
+<p>对不起，这个版本的mysql的可利用漏洞没找着，是我太菜了。</p>
+<h2 id="其他方法">其他方法</h2>
+<p>我会留意的，一直研究。</p>
+<h2 id="背后有web界面的mysql的提权方法">背后有web界面的mysql的提权方法</h2>
+<p>…<br>
+以后我会整理的，我知道，我太菜了</p>
+<h2 id="新发现">新发现</h2>
+<p>测试中我们发现了：<br>
+1&gt; mysql的系统命令，实际上执行的是我们操控者的电脑上的命令<br>
+2&gt; mysql进程在服务上一般不以root权限来运行，所以很多事情做不成，想要刻意让它以root权限运行，也挺不容易的，单数这样的话渗透就容易多了<br>
+sqlmap获取shell，ncat命令反弹shell，有ssh服务的话，就直接写自己的公钥就好了，注意别暴露自己的信息，我测试就在公钥里暴露了自己的信息，让学长一顿嘲笑。</p>
+<h1 id="总结">总结</h1>
+<h2 id="当我们拥有一个mysql-root账号后我们能够干些什么">当我们拥有一个mysql root账号后我们能够干些什么？</h2>
+<p>1）拖库<br>
+2）删库或删除某些关键数据<br>
+3）修改数据（可能是某些关键数据，其他用户的权限等）<br>
+4）查看一些关键的数据，如，mysql的安装路径，mysql的结构，操作系统的信息等<br>
+5）做一切mysql root账号可以做的事情，可能是不起眼或无危害的操作，但可以造成危害的，比如写一个shell。</p>
+<h1 id="问题">问题</h1>
+<p>1.学会更好的姿势来渗透进一台公网mysql<br>
+2.网站挂马，服务器挂马和网站或服务器写进一个shell这几个名词，背后的姿势最近有点乱<br>
+3.当我们获得了一台服务器后我们能干什么？<br>
+4.继续总结root账号带给我们的用途<br>
+5.mof提权是什么？</p>
+
                 
 
                 <hr>
@@ -224,12 +283,12 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/article/某公司的公网mysql弱密码问题思考/" data-toggle="tooltip" data-placement="top" title="某公司的公网mysql弱密码问题思考">&larr; Previous Post</a>
+                            <a href="/article/SDP-vpn的继任者/" data-toggle="tooltip" data-placement="top" title="SDP vpn的继任者?">&larr; Previous Post</a>
                         </li>
                     
                     
                         <li class="next">
-                            <a href="/article/CTFHUB-WEB-1/" data-toggle="tooltip" data-placement="top" title="CTFHUB-WEB(1)">Next Post &rarr;</a>
+                            <a href="/article/零信任网络初探/" data-toggle="tooltip" data-placement="top" title="零信任网络初探">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -279,7 +338,7 @@
         <div id="toc" class="toc-article">
         <strong class="toc-title">Contents</strong>
         
-          <ol class="nav">none</ol>
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#渗透过程"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">&#x6E17;&#x900F;&#x8FC7;&#x7A0B;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#get-慢查询日志写shell的方法mysql之突破secure_file_priv写shell"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Get &#x6162;&#x67E5;&#x8BE2;&#x65E5;&#x5FD7;&#x5199;shell&#x7684;&#x65B9;&#x6CD5;(mysql&#x4E4B;&#x7A81;&#x7834;secure_file_priv&#x5199;shell)&#xFF1A;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#日志的利用"><span class="toc-nav-number">1.1.1.</span> <span class="toc-nav-text">&#x65E5;&#x5FD7;&#x7684;&#x5229;&#x7528;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-4"><a class="toc-nav-link" href="#我们主要利用慢查询日志来写shell步骤大致分为三步"><span class="toc-nav-number">1.1.1.1.</span> <span class="toc-nav-text">&#x6211;&#x4EEC;&#x4E3B;&#x8981;&#x5229;&#x7528;&#x6162;&#x67E5;&#x8BE2;&#x65E5;&#x5FD7;&#x6765;&#x5199;shell,&#x6B65;&#x9AA4;&#x5927;&#x81F4;&#x5206;&#x4E3A;&#x4E09;&#x6B65;:</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#1设置slow_query_log1即启用慢查询日志默认禁用"><span class="toc-nav-number">1.1.1.1.1.</span> <span class="toc-nav-text">1.&#x8BBE;&#x7F6E;slow_query_log=1.&#x5373;&#x542F;&#x7528;&#x6162;&#x67E5;&#x8BE2;&#x65E5;&#x5FD7;(&#x9ED8;&#x8BA4;&#x7981;&#x7528;)&#x3002;</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#2伪造修改slow_query_log_file日志文件的绝对路径以及文件名"><span class="toc-nav-number">1.1.1.1.2.</span> <span class="toc-nav-text">2.&#x4F2A;&#x9020;(&#x4FEE;&#x6539;)slow_query_log_file&#x65E5;&#x5FD7;&#x6587;&#x4EF6;&#x7684;&#x7EDD;&#x5BF9;&#x8DEF;&#x5F84;&#x4EE5;&#x53CA;&#x6587;&#x4EF6;&#x540D;</span></a></li><li class="toc-nav-item toc-nav-level-5"><a class="toc-nav-link" href="#3向日志文件写入shell"><span class="toc-nav-number">1.1.1.1.3.</span> <span class="toc-nav-text">3.&#x5411;&#x65E5;&#x5FD7;&#x6587;&#x4EF6;&#x5199;&#x5165;shell</span></a></li></ol></li></ol></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#尝试手动mysql-udf提权"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">&#x5C1D;&#x8BD5;&#x624B;&#x52A8;mysql udf&#x63D0;&#x6743;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#联合一些mysql的其他漏洞来帮助我们获取服务器权限"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">&#x8054;&#x5408;&#x4E00;&#x4E9B;mysql&#x7684;&#x5176;&#x4ED6;&#x6F0F;&#x6D1E;&#x6765;&#x5E2E;&#x52A9;&#x6211;&#x4EEC;&#x83B7;&#x53D6;&#x670D;&#x52A1;&#x5668;&#x6743;&#x9650;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#其他方法"><span class="toc-nav-number">1.4.</span> <span class="toc-nav-text">&#x5176;&#x4ED6;&#x65B9;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#背后有web界面的mysql的提权方法"><span class="toc-nav-number">1.5.</span> <span class="toc-nav-text">&#x80CC;&#x540E;&#x6709;web&#x754C;&#x9762;&#x7684;mysql&#x7684;&#x63D0;&#x6743;&#x65B9;&#x6CD5;</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#新发现"><span class="toc-nav-number">1.6.</span> <span class="toc-nav-text">&#x65B0;&#x53D1;&#x73B0;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#总结"><span class="toc-nav-number">2.</span> <span class="toc-nav-text">&#x603B;&#x7ED3;</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#当我们拥有一个mysql-root账号后我们能够干些什么"><span class="toc-nav-number">2.1.</span> <span class="toc-nav-text">&#x5F53;&#x6211;&#x4EEC;&#x62E5;&#x6709;&#x4E00;&#x4E2A;mysql root&#x8D26;&#x53F7;&#x540E;&#x6211;&#x4EEC;&#x80FD;&#x591F;&#x5E72;&#x4E9B;&#x4EC0;&#x4E48;&#xFF1F;</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link" href="#问题"><span class="toc-nav-number">3.</span> <span class="toc-nav-text">&#x95EE;&#x9898;</span></a></li></ol>
         
         </div>
       </aside>
@@ -299,7 +358,7 @@
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
                        
-                          <a class="tag" href="/tags/#零信任网络" title="零信任网络">零信任网络</a>
+                          <a class="tag" href="/tags/#渗透测试" title="渗透测试">渗透测试</a>
                         
                     </div>
                 </section>
